@@ -1,34 +1,41 @@
 <template>
   <section id="prova-social" class="py-5 bg-light">
     <div class="container">
-      <h2 class="text-center mb-4">Quem usa, recomenda</h2>
-      <div class="row justify-content-center mb-4">
+      <h2 class="text-center mb-5 display-5">Resultados que falam por si</h2>
+      <div class="row justify-content-center mb-5">
         <div class="col-12 col-md-8">
-          <div class="card shadow-sm">
-            <div class="card-body d-flex flex-column flex-md-row align-items-center gap-3">
-              <img src="https://i.pravatar.cc/100" alt="Cliente" class="rounded-circle" width="80" height="80" />
-              <blockquote class="mb-0">“Com a Linkize aumentei minhas vendas em 30% sem precisar de loja online”.</blockquote>
+          <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4 p-md-5 text-center">
+              <img src="https://i.pravatar.cc/100?img=1" alt="Cliente Satisfeito" class="rounded-circle mb-3" width="80" height="80" />
+              <figure>
+                <blockquote class="blockquote">
+                  <p class="mb-0 fst-italic">“Com a Linkize aumentei minhas vendas em 30% sem precisar de loja online. É simples e funciona.”</p>
+                </blockquote>
+                <figcaption class="blockquote-footer mt-2">
+                  Ana, dona de <cite title="Fonte">Cosméticos Naturais</cite>
+                </figcaption>
+              </figure>
             </div>
           </div>
         </div>
       </div>
       <div class="row g-4 text-center">
         <div class="col-12 col-md-4">
-          <div class="p-4 border rounded-3 h-100">
-            <div class="display-5 fw-bold">+30%</div>
-            <div class="text-muted">em vendas</div>
+          <div class="p-4 h-100">
+            <div class="display-4 fw-bolder text-primary">+30%</div>
+            <div class="text-muted mt-2">em vendas</div>
           </div>
         </div>
         <div class="col-12 col-md-4">
-          <div class="p-4 border rounded-3 h-100">
-            <div class="display-5 fw-bold">24h</div>
-            <div class="text-muted">disponível</div>
+          <div class="p-4 h-100">
+            <div class="display-4 fw-bolder text-primary">24h</div>
+            <div class="text-muted mt-2">disponível</div>
           </div>
         </div>
         <div class="col-12 col-md-4">
-          <div class="p-4 border rounded-3 h-100">
-            <div class="display-5 fw-bold">99%</div>
-            <div class="text-muted">das conversas viram pedidos</div>
+          <div class="p-4 h-100">
+            <div class="display-4 fw-bolder text-primary">99%</div>
+            <div class="text-muted mt-2">das conversas viram pedidos</div>
           </div>
         </div>
       </div>
@@ -39,3 +46,12 @@
 <script setup lang="ts">
 // Sem lógica por enquanto
 </script>
+
+<style scoped>
+.blockquote {
+  font-size: 1.1rem;
+}
+.text-primary {
+  color: #0077B6 !important;
+}
+</style>
