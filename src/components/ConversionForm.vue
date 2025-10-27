@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { supabase } from '../lib/supabaseClient';
 
 const form = ref({
   fullName: '',
@@ -7,13 +8,86 @@ const form = ref({
   email: ''
 });
 
-const handleSubmit = () => {
-  console.log('Dados do formulário:', form.value);
-  alert('Cadastro enviado com sucesso! (Verifique o console para ver os dados)');
-  // Reset form
-  form.value.fullName = '';
-  form.value.whatsapp = '';
-  form.value.email = '';
+const loading = ref(false);
+const success = ref(false);
+const error = ref<string | null>(null);
+
+const getUtmFromSearch = (search = window.location.search) => {
+  try {
+    const params = new URLSearchParams(search);
+    return {
+      utm_campaign: params.get('utm_campaign') || null,
+      utm_medium: params.get('utm_medium') || null,
+      utm_source: params.get('utm_source') || null
+    };
+  } catch (e) {
+    return { utm_campaign: null, utm_medium: null, utm_source: null };
+  }
+};
+
+const normalizeWhatsapp = (value: string) => {
+  const digits = value.replace(/\D/g, '');
+  if (!digits) return null;
+  // se 11 dígitos (55 + 9), assume BR e prefixa +
+  if (digits.length === 11) return `+55${digits}`;
+  // se já tiver country code (12+), prefixa +
+  if (digits.length > 11) return `+${digits}`;
+  // se menos, devolve digits (backend pode validar)
+  return digits;
+};
+
+const handleSubmit = async () => {
+  error.value = null;
+  success.value = false;
+  loading.value = true;
+
+  try {
+    // validação simples
+    if (!form.value.fullName || !form.value.email) {
+      throw new Error('Nome e e-mail são obrigatórios');
+    }
+
+    const whatsappNormalized = normalizeWhatsapp(form.value.whatsapp || '');
+    const utm = getUtmFromSearch();
+
+    const payload: any = {
+      full_name: form.value.fullName,
+      email: form.value.email,
+      whatsapp: whatsappNormalized,
+      source: 'landing_page',
+      utm_campaign: utm.utm_campaign,
+      utm_medium: utm.utm_medium,
+      utm_source: utm.utm_source,
+      metadata: {
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+        referrer: typeof document !== 'undefined' ? document.referrer : null,
+        landingPath: typeof window !== 'undefined' ? window.location.pathname : null
+      }
+    };
+
+    // Inserir no Supabase
+    const { data, error: supabaseError } = await supabase
+      .from('leads')
+      .insert(payload)
+      .select('id')
+      .single();
+
+    if (supabaseError) {
+      throw supabaseError;
+    }
+
+    success.value = true;
+    // reset form
+    form.value.fullName = '';
+    form.value.whatsapp = '';
+    form.value.email = '';
+  } catch (err: any) {
+    error.value = err?.message || 'Erro ao enviar. Tente novamente.';
+    // eslint-disable-next-line no-console
+    console.error('Lead submit error:', err);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
@@ -58,8 +132,14 @@ export default {
                   <label for="email" class="form-label">E-mail</label>
                   <input type="email" class="form-control form-control-lg" id="email" v-model="form.email" required>
                 </div>
+                <div v-if="error" class="alert alert-danger">{{ error }}</div>
+                <div v-if="success" class="alert alert-success">Cadastro enviado com sucesso!</div>
+
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-primary btn-lg rounded-pill mt-3">Quero testar a Linkize</button>
+                  <button :disabled="loading" type="submit" class="btn btn-primary btn-lg rounded-pill mt-3">
+                    <span v-if="!loading">Quero testar a Linkize</span>
+                    <span v-else>Enviando…</span>
+                  </button>
                 </div>
               </form>
             </div>
