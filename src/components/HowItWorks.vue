@@ -1,71 +1,92 @@
 <template>
-  <section id="como-funciona" class="py-5">
-    <div class="container">
-      <h2 class="text-center mb-5 display-5">Vender no WhatsApp nunca foi tão fácil</h2>
-      <div class="row g-4 text-center align-items-start position-relative">
-        <!-- Linha conectora (apenas desktop) -->
-        <div class="col-12 d-none d-lg-block position-absolute top-50 start-0 w-100" style="transform: translateY(-50%); z-index: 0;">
-          <svg width="100%" height="2">
-            <line x1="0" y1="1" x2="100%" y2="1" stroke="#dee2e6" stroke-width="2" stroke-dasharray="8, 8"/>
-          </svg>
-        </div>
-
-        <div class="col-6 col-lg-3 step">
-          <div class="step-icon">1</div>
-          <div class="fw-bold mt-3">Cliente pede</div>
-          <div class="text-muted small">“Quero um shampoo”</div>
-        </div>
-        <div class="col-6 col-lg-3 step">
-          <div class="step-icon">2</div>
-          <div class="fw-bold mt-3">Bot sugere</div>
-          <div class="text-muted small">Produtos disponíveis</div>
-        </div>
-        <div class="col-6 col-lg-3 step">
-          <div class="step-icon">3</div>
-          <div class="fw-bold mt-3">Pagamento rápido</div>
-          <div class="text-muted small">Pix ou Mercado Pago</div>
-        </div>
-        <div class="col-6 col-lg-3 step">
-          <div class="step-icon">4</div>
-          <div class="fw-bold mt-3">Confirmação instantânea</div>
-          <div class="text-muted small">Pedido atualizado</div>
-        </div>
+  <section id="como-funciona" class="flow">
+    <div class="section-container">
+      <div class="flow-heading">
+        <h2>Se você já vende pelo WhatsApp, a Linkize organiza e profissionaliza seu negócio.</h2>
       </div>
+
+      <div class="flow-grid">
+        <article class="flow-step">
+          <span>1</span>
+          <h3>Monte seu catálogo</h3>
+          <p>Cadastre produtos, categorias e preços em poucos minutos pelo celular ou desktop.</p>
+        </article>
+        <article class="flow-step">
+          <span>2</span>
+          <h3>Compartilhe por link e QR</h3>
+          <p>Divulgue no status, Instagram, loja física, delivery e qualquer ponto de contato.</p>
+        </article>
+        <article class="flow-step">
+          <span>3</span>
+          <h3>Receba pedidos prontos</h3>
+          <p>Cliente escolhe os itens e a mensagem chega no seu WhatsApp pronta para fechar.</p>
+        </article>
+        </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-// Sem lógica por enquanto
+// Sem logica nesta secao.
 </script>
 
 <style scoped>
-.step {
-  position: relative;
-  z-index: 1;
-  background-color: #fff; /* Cor de fundo da seção */
-  padding: 1rem 0;
+.flow {
+  padding: 4.5rem 0;
 }
-.step-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #0077B6;
-  color: white;
+
+.flow-heading {
+  text-align: center;
+}
+
+.flow-heading h2 {
+  margin: 0 auto;
+  max-width: 28ch;
+  font-size: clamp(1.65rem, 3vw, 2.3rem);
+}
+
+.flow-grid {
+  margin-top: 2.1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.flow-step {
+  position: relative;
+  padding: 1.3rem;
+  border-radius: 18px;
+  background: var(--surface-soft);
+  border: 1px solid #d0e2d2;
+}
+
+.flow-step span {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 1.5rem;
-  border: 3px solid #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #1f8f4d;
+  color: #fff;
+  font-weight: 700;
 }
 
-/* Em telas menores, removemos o padding que cria espaço para a linha */
-@media (max-width: 991.98px) {
-  .step {
-    background-color: transparent;
-    padding: 0;
+.flow-step h3 {
+  margin: 0.95rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.flow-step p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.58;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 991px) {
+  .flow-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

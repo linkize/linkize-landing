@@ -76,6 +76,19 @@ const handleSubmit = async () => {
       throw supabaseError;
     }
 
+    // Disparar email de notificação (não bloqueia o fluxo)
+    const emailServerUrl = import.meta.env.VITE_EMAIL_SERVER_URL || 'http://localhost:3001';
+    
+    fetch(`${emailServerUrl}/api/send-lead-notification`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn('Falha ao enviar email de notificação:', err);
+      // Não falha o fluxo do usuário
+    });
+
     success.value = true;
     // reset form
     form.value.fullName = '';
@@ -102,79 +115,207 @@ export default {
 </script>
 
 <template>
-  <section id="conversion-form" class="py-5" style="background-color: #F9FAFB;">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-6">
-          <div class="text-center mb-4">
-            <h2 class="display-5 fw-bold">Comece grátis agora</h2>
-            <p class="lead text-muted">Cadastre-se e descubra como transformar conversas em vendas.</p>
-          </div>
-          <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-body p-4 p-md-5">
-              <form @submit.prevent="handleSubmit">
-                <div class="mb-3">
-                  <label for="fullName" class="form-label">Nome completo</label>
-                  <input type="text" class="form-control form-control-lg" id="fullName" v-model="form.fullName" required>
-                </div>
-                <div class="mb-3">
-                  <label for="whatsapp" class="form-label">WhatsApp</label>
-                  <input 
-                    type="text" 
-                    class="form-control form-control-lg" 
-                    id="whatsapp" 
-                    v-model="form.whatsapp"
-                    v-imask="{ mask: '(00) 00000-0000' }"
-                    required
-                  >
-                </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label">E-mail</label>
-                  <input type="email" class="form-control form-control-lg" id="email" v-model="form.email" required>
-                </div>
-                <div v-if="error" class="alert alert-danger">{{ error }}</div>
-                <div v-if="success" class="alert alert-success">Cadastro enviado com sucesso!</div>
+  <section id="conversion-form" class="signup-section">
+    <div class="section-container">
+      <div class="signup-layout">
+        <div class="signup-copy">
+          <p class="copy-badge">Teste sem compromisso</p>
+          <h2>Comece a vender melhor hoje</h2>
+          <p>
+            Crie sua conta gratuita, publique seu catálogo em minutos e receba pedidos prontos no
+            WhatsApp.
+          </p>
+          <ul>
+            <li><i class="bi bi-check2"></i> 30 dias grátis</li>
+            <li><i class="bi bi-check2"></i> Sem cartão para começar</li>
+            <li><i class="bi bi-check2"></i> Setup simples e guiado</li>
+          </ul>
+        </div>
 
-                <div class="d-grid">
-                  <button :disabled="loading" type="submit" class="btn btn-primary btn-lg rounded-pill mt-3">
-                    <span v-if="!loading">Quero testar a Linkize</span>
-                    <span v-else>Enviando…</span>
-                  </button>
-                </div>
-              </form>
-            </div>
+        <div class="signup-card">
+          <div class="card-head">
+            <h3>Criar minha conta grátis</h3>
+            <p>Leva menos de 1 minuto.</p>
+          </div>
+
+          <form @submit.prevent="handleSubmit" class="signup-form">
+            <label for="fullName">Nome completo</label>
+            <input type="text" id="fullName" v-model="form.fullName" required>
+
+            <label for="whatsapp">WhatsApp</label>
+            <input
+              type="text"
+              id="whatsapp"
+              v-model="form.whatsapp"
+              v-imask="{ mask: '(00) 00000-0000' }"
+              required
+            >
+
+            <label for="email">E-mail</label>
+            <input type="email" id="email" v-model="form.email" required>
+
+            <div v-if="error" class="status-box status-error">{{ error }}</div>
+            <div v-if="success" class="status-box status-success">Cadastro enviado com sucesso!</div>
+
+            <button :disabled="loading" type="submit" class="submit-btn">
+              <span v-if="!loading">Quero testar a Linkize</span>
+              <span v-else>Enviando...</span>
+            </button>
+          </form>
+
+          <p class="micro-copy">Ao continuar, voce concorda em receber contato comercial da Linkize.</p>
           </div>
         </div>
       </div>
-    </div>
   </section>
 </template>
 
 
 <style scoped>
-.btn-primary {
-    background-color: #0077B6;
-    border-color: #0077B6;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+.signup-section {
+  padding: 5rem 0;
 }
 
-.btn-primary:hover {
-    background-color: #005f94;
-    transform: translateY(-2px);
+.signup-layout {
+  background: linear-gradient(145deg, #12241a, #193322);
+  border-radius: 30px;
+  padding: 1.3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+.signup-copy {
+  color: #f4fff5;
+  padding: 1.2rem;
+}
+
+.copy-badge {
+  margin: 0;
+  display: inline-flex;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 0.84rem;
+}
+
+.signup-copy h2 {
+  margin: 1rem 0 0;
+  font-size: clamp(1.8rem, 3.2vw, 2.7rem);
+  line-height: 1.05;
+}
+
+.signup-copy p {
+  margin: 0.9rem 0 0;
+  color: rgba(241, 251, 243, 0.86);
+  line-height: 1.6;
+}
+
+.signup-copy ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.2rem 0 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.signup-copy li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.signup-card {
+  border-radius: 20px;
+  border: 1px solid #d4e2d7;
+  background: #fff;
+  padding: 1.2rem;
+}
+
+.card-head h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.card-head p {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+
+.signup-form {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.signup-form label {
+  font-size: 0.9rem;
+  color: #2b4134;
+}
+
+.signup-form input {
+  border: 1px solid #ccdbcf;
+  border-radius: 12px;
+  background: #f6faf5;
+  color: #1b2f23;
+  min-height: 48px;
+  padding: 0 0.85rem;
+}
+
+.signup-form input:focus {
+  border-color: #36b76a;
+  outline: 3px solid rgba(37, 211, 102, 0.2);
+}
+
+.submit-btn {
+  margin-top: 0.65rem;
+  border: none;
+  border-radius: 12px;
+  min-height: 48px;
+  color: #fff;
+  background: var(--accent);
+  font-weight: 700;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.submit-btn:hover {
+  filter: brightness(0.94);
+  transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+.status-box {
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.status-error {
+  color: #8f2234;
+  border: 1px solid #f0b8c2;
+  background: #fff2f4;
+}
+
+.status-success {
+  color: #155935;
+  border: 1px solid #c2e8d0;
+  background: #f0fff5;
+}
+
+.micro-copy {
+  margin: 0.9rem 0 0;
+  color: #6e7a70;
+  font-size: 0.78rem;
+}
+
+@media (max-width: 991px) {
+  .signup-layout {
+    grid-template-columns: 1fr;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-#conversion-form {
-  animation: fadeIn 1s ease-out forwards;
 }
 </style>

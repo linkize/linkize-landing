@@ -1,57 +1,112 @@
 <template>
-  <section id="prova-social" class="py-5 bg-light">
-    <div class="container">
-      <h2 class="text-center mb-5 display-5">Resultados que falam por si</h2>
-      <div class="row justify-content-center mb-5">
-        <div class="col-12 col-md-8">
-          <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-body p-4 p-md-5 text-center">
-              <img src="https://i.pravatar.cc/100?img=1" alt="Cliente Satisfeito" class="rounded-circle mb-3" width="80" height="80" />
-              <figure>
-                <blockquote class="blockquote">
-                  <p class="mb-0 fst-italic">“Com a Linkize aumentei minhas vendas em 30% sem precisar de loja online. É simples e funciona.”</p>
-                </blockquote>
-                <figcaption class="blockquote-footer mt-2">
-                  Ana, dona de <cite title="Fonte">Cosméticos Naturais</cite>
-                </figcaption>
-              </figure>
-            </div>
-          </div>
+  <section id="prova-social" class="social-proof">
+    <div class="section-container">
+      <h2>Resultados reais para quem vive de venda no WhatsApp</h2>
+
+      <article class="quote-card">
+        <img src="https://i.pravatar.cc/100?img=32" alt="Cliente da Linkize" width="72" height="72" />
+        <div>
+          <p>
+            “Com a Linkize eu parei de perder pedido no meio da conversa. Hoje o cliente chega mais
+            decidido e eu fecho mais rápido. O catálogo com link e QR mudou meu dia a dia.”
+          </p>
+          <strong>Ana, dona da Cosméticos Naturais</strong>
         </div>
-      </div>
-      <div class="row g-4 text-center">
-        <div class="col-12 col-md-4">
-          <div class="p-4 h-100">
-            <div class="display-4 fw-bolder text-primary">+30%</div>
-            <div class="text-muted mt-2">em vendas</div>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <div class="p-4 h-100">
-            <div class="display-4 fw-bolder text-primary">24h</div>
-            <div class="text-muted mt-2">disponível</div>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <div class="p-4 h-100">
-            <div class="display-4 fw-bolder text-primary">99%</div>
-            <div class="text-muted mt-2">das conversas viram pedidos</div>
-          </div>
-        </div>
+      </article>
+
+      <div class="kpi-grid">
+        <article>
+          <strong>+30%</strong>
+          <span>em vendas</span>
+        </article>
+        <article>
+          <strong>24h</strong>
+          <span>catálogo disponível</span>
+        </article>
+        <article>
+          <strong>+3x</strong>
+          <span>mais agilidade nos pedidos</span>
+        </article>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-// Sem lógica por enquanto
+// Sem logica nesta secao.
 </script>
 
 <style scoped>
-.blockquote {
-  font-size: 1.1rem;
+.social-proof {
+  padding: 4.75rem 0;
 }
-.text-primary {
-  color: #0077B6 !important;
+
+.social-proof h2 {
+  text-align: center;
+  margin: 0;
+  font-size: clamp(1.65rem, 3vw, 2.3rem);
+}
+
+.quote-card {
+  margin-top: 2rem;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid #d8e4d7;
+  box-shadow: var(--shadow);
+  padding: 1.4rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+}
+
+.quote-card img {
+  border-radius: 999px;
+}
+
+.quote-card p {
+  margin: 0 0 0.5rem;
+  color: #1b2e23;
+  line-height: 1.62;
+}
+
+.quote-card strong {
+  color: #2f4738;
+  font-size: 0.95rem;
+}
+
+.kpi-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.kpi-grid article {
+  border-radius: 16px;
+  border: 1px solid #d6e5d6;
+  background: #f8fcf7;
+  padding: 1.1rem;
+  text-align: center;
+}
+
+.kpi-grid strong {
+  display: block;
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.kpi-grid span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 991px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-card {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
